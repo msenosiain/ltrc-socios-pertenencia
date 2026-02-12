@@ -1,6 +1,6 @@
 # 🏉 LTRC Socios Pertenencia
 
-API REST para gestión de miembros del club de rugby.
+App para gestión de Socios Pertenencia de LTRC.
 
 ## Stack
 
