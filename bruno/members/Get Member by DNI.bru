@@ -1,0 +1,15 @@
+meta {
+  name: Get Member by DNI
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/members/document/:documentNumber
+  body: none
+  auth: none
+}
+
+params:path {
+  documentNumber: 12345678
+}

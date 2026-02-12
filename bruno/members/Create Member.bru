@@ -1,0 +1,23 @@
+meta {
+  name: Create Member
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/members
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "birthDate": "1990-01-15",
+    "documentNumber": "12345678",
+    "creditCardNumber": "4111111111111111",
+    "creditCardExpirationDate": "12/25"
+  }
+}
+

@@ -1,0 +1,22 @@
+meta {
+  name: Update Member
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/members/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "firstName": "Juan Carlos",
+    "lastName": "Pérez García"
+  }
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Create Member with Image
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/members
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  firstName: Miguel
+  lastName: Senosiain
+  birthDate: 1977-05-30
+  documentNumber: 25984568
+  creditCardNumber: 4111111111111111
+  creditCardExpirationDate: 12/25
+  documentImage: @file(/Users/miguel/Documents/dni-miguel-senosiain-biritos.jpg)
+}
+
+docs {
+  # Subir imagen del DNI
+  
+  Para adjuntar la imagen:
+  1. Hacer click en el campo `documentImage`
+  2. Bruno abrirá un selector de archivos
+  3. Seleccionar la imagen del DNI (JPG, PNG, etc.)
+  
+  O arrastra el archivo directamente al campo.
+}

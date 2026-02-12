@@ -10,10 +10,12 @@ node_modules
 
 # IDEs and editors
 /.idea
+/.run
 .project
 .classpath
 .c9/
 *.launch
+*.iml
 .settings/
 *.sublime-workspace
 
@@ -33,6 +35,10 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+
+# Environment files
+.env
+*.log
 
 # System Files
 .DS_Store

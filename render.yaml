@@ -1,0 +1,22 @@
+# Render Blueprint configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ltrc-socios-pertenencia-api
+    runtime: node
+    buildCommand: npm ci && npx nx build api --prod
+    startCommand: node dist/apps/api/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false
+      - key: API_URL
+        sync: false
+      - key: GOOGLE_APPS_SCRIPT_URL
+        sync: false
+    healthCheckPath: /api
+
