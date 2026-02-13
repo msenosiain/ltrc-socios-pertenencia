@@ -1,8 +1,8 @@
 module.exports = {
-  displayName: 'socios-pertenencia',
+  displayName: 'ui',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/socios-pertenencia',
+  coverageDirectory: '../../coverage/apps/ui',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

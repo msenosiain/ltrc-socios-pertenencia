@@ -1,0 +1,191 @@
+<div class="registration-container">
+  <div class="registration-card">
+    <h1>Registro de Socio</h1>
+    <p class="subtitle">Complete el formulario para registrarse como socio del club</p>
+
+    @if (submitSuccess) {
+      <div class="alert alert-success">
+        <strong>¡Registro exitoso!</strong> Su solicitud ha sido enviada correctamente.
+      </div>
+    }
+
+    @if (submitError) {
+      <div class="alert alert-error">
+        <strong>Error:</strong> {{ submitError }}
+      </div>
+    }
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <!-- Member Data Section -->
+      <section class="form-section">
+        <h2>Datos del Socio</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Nombre *</label>
+            <input
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              [class.invalid]="isFieldInvalid('firstName')"
+              placeholder="Ingrese su nombre">
+            @if (isFieldInvalid('firstName')) {
+              <span class="error-message">El nombre es requerido</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Apellido *</label>
+            <input
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              [class.invalid]="isFieldInvalid('lastName')"
+              placeholder="Ingrese su apellido">
+            @if (isFieldInvalid('lastName')) {
+              <span class="error-message">El apellido es requerido</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="birthDate">Fecha de Nacimiento *</label>
+            <input
+              type="date"
+              id="birthDate"
+              formControlName="birthDate"
+              [class.invalid]="isFieldInvalid('birthDate')">
+            @if (isFieldInvalid('birthDate')) {
+              <span class="error-message">La fecha de nacimiento es requerida</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="documentNumber">Número de DNI *</label>
+            <input
+              type="text"
+              id="documentNumber"
+              formControlName="documentNumber"
+              [class.invalid]="isFieldInvalid('documentNumber')"
+              placeholder="12345678"
+              maxlength="8">
+            @if (isFieldInvalid('documentNumber')) {
+              <span class="error-message">El DNI debe tener 8 dígitos</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="documentImage">Foto del DNI</label>
+          <input
+            type="file"
+            id="documentImage"
+            (change)="onFileSelected($event)"
+            accept="image/*">
+          @if (selectedFile) {
+            <span class="file-selected">Archivo seleccionado: {{ selectedFile.name }}</span>
+          }
+        </div>
+      </section>
+
+      <!-- Card Holder Section -->
+      <section class="form-section">
+        <h2>Datos del Titular de la Tarjeta</h2>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="sameAsMember">
+            <span>El titular es el mismo que el socio</span>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardHolderFirstName">Nombre del Titular *</label>
+            <input
+              type="text"
+              id="cardHolderFirstName"
+              formControlName="cardHolderFirstName"
+              [class.invalid]="isFieldInvalid('cardHolderFirstName')"
+              placeholder="Nombre del titular">
+            @if (isFieldInvalid('cardHolderFirstName')) {
+              <span class="error-message">El nombre del titular es requerido</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="cardHolderLastName">Apellido del Titular *</label>
+            <input
+              type="text"
+              id="cardHolderLastName"
+              formControlName="cardHolderLastName"
+              [class.invalid]="isFieldInvalid('cardHolderLastName')"
+              placeholder="Apellido del titular">
+            @if (isFieldInvalid('cardHolderLastName')) {
+              <span class="error-message">El apellido del titular es requerido</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardHolderDocumentNumber">DNI del Titular *</label>
+          <input
+            type="text"
+            id="cardHolderDocumentNumber"
+            formControlName="cardHolderDocumentNumber"
+            [class.invalid]="isFieldInvalid('cardHolderDocumentNumber')"
+            placeholder="12345678"
+            maxlength="8">
+          @if (isFieldInvalid('cardHolderDocumentNumber')) {
+            <span class="error-message">El DNI del titular debe tener 8 dígitos</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="creditCardNumber">Número de Tarjeta *</label>
+            <input
+              type="text"
+              id="creditCardNumber"
+              formControlName="creditCardNumber"
+              [class.invalid]="isFieldInvalid('creditCardNumber')"
+              placeholder="4111111111111111"
+              maxlength="19">
+            @if (isFieldInvalid('creditCardNumber')) {
+              <span class="error-message">Ingrese un número de tarjeta válido (13-19 dígitos)</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="creditCardExpirationDate">Vencimiento (MM/AA) *</label>
+            <input
+              type="text"
+              id="creditCardExpirationDate"
+              formControlName="creditCardExpirationDate"
+              [class.invalid]="isFieldInvalid('creditCardExpirationDate')"
+              placeholder="12/25"
+              maxlength="5">
+            @if (isFieldInvalid('creditCardExpirationDate')) {
+              <span class="error-message">Formato: MM/AA (ej: 12/25)</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            <span>Enviando...</span>
+          } @else {
+            <span>Registrar Socio</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
