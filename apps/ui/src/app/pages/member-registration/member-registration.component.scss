@@ -1,7 +1,13 @@
+@use 'sass:color';
+
+// LTRC Club Colors
+$ltrc-navy: #132142;
+$ltrc-red: #a60a14;
+
 .registration-container {
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  background: linear-gradient(135deg, $ltrc-navy 0%, color.adjust($ltrc-navy, $lightness: 10%) 100%);
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -19,13 +25,14 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #1b5e20;
+      color: $ltrc-navy;
       font-size: 1.75rem;
 
       mat-icon {
         font-size: 2rem;
         width: 2rem;
         height: 2rem;
+        color: $ltrc-red;
       }
     }
 
@@ -42,7 +49,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #1b5e20;
+    color: $ltrc-navy;
     font-size: 1.1rem;
     margin-bottom: 1rem;
 
@@ -50,6 +57,7 @@
       font-size: 1.25rem;
       width: 1.25rem;
       height: 1.25rem;
+      color: $ltrc-red;
     }
   }
 
@@ -114,12 +122,12 @@ mat-divider {
 // Snackbar custom styles
 :host ::ng-deep {
   .success-snackbar {
-    --mdc-snackbar-container-color: #1b5e20;
+    --mdc-snackbar-container-color: #{$ltrc-navy};
     --mdc-snackbar-supporting-text-color: white;
   }
 
   .error-snackbar {
-    --mdc-snackbar-container-color: #c62828;
+    --mdc-snackbar-container-color: #{$ltrc-red};
     --mdc-snackbar-supporting-text-color: white;
   }
 }
