@@ -88,6 +88,15 @@ export class MembersService {
         ? `${process.env.API_URL || 'http://localhost:3000'}/api/members/image/${member.documentImageFileId}`
         : 'N/A';
 
+      // Handle case where cardHolder might be undefined (old data)
+      const cardHolder = member.cardHolder || {
+        firstName: '',
+        lastName: '',
+        documentNumber: '',
+        creditCardNumber: '',
+        creditCardExpirationDate: '',
+      };
+
       const memberDataForSheet = {
         // Member data
         firstName: member.firstName,
@@ -96,13 +105,15 @@ export class MembersService {
         birthDate: new Date(member.birthDate).toLocaleDateString('es-AR'),
         documentImageLink,
         // Card holder data
-        cardHolderFirstName: member.cardHolder.firstName,
-        cardHolderLastName: member.cardHolder.lastName,
-        cardHolderDocumentNumber: member.cardHolder.documentNumber,
-        creditCardNumber: member.cardHolder.creditCardNumber,
-        creditCardExpirationDate: member.cardHolder.creditCardExpirationDate,
+        cardHolderFirstName: cardHolder.firstName,
+        cardHolderLastName: cardHolder.lastName,
+        cardHolderDocumentNumber: cardHolder.documentNumber,
+        creditCardNumber: cardHolder.creditCardNumber,
+        creditCardExpirationDate: cardHolder.creditCardExpirationDate,
         createdAt: new Date(member.createdAt).toLocaleString('es-AR'),
       };
+
+      this.logger.log(`Sending to Google Sheets: ${JSON.stringify(memberDataForSheet)}`);
 
       await this.googleAppsScriptService.appendMemberToSheet(memberDataForSheet);
       this.logger.log(`Member ${member.documentNumber} added to Google Sheet`);
