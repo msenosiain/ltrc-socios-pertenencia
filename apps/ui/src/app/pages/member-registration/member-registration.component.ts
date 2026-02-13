@@ -15,6 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MembersService } from '../../services/members.service';
 import { CreateMemberDto } from '@socios-pertenencia/shared';
+import { CreditCardMaskDirective } from '../../directives/credit-card-mask.directive';
 
 @Component({
   selector: 'app-member-registration',
@@ -33,6 +34,7 @@ import { CreateMemberDto } from '@socios-pertenencia/shared';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDividerModule,
+    CreditCardMaskDirective,
   ],
   templateUrl: './member-registration.component.html',
   styleUrl: './member-registration.component.scss'
@@ -65,7 +67,7 @@ export class MemberRegistrationComponent implements OnInit {
       cardHolderFirstName: ['', [Validators.required]],
       cardHolderLastName: ['', [Validators.required]],
       cardHolderDocumentNumber: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
-      creditCardNumber: ['', [Validators.required, Validators.pattern(/^\d{13,19}$/)]],
+      creditCardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
       creditCardExpirationDate: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
 
       // Same as member checkbox
@@ -167,7 +169,7 @@ export class MemberRegistrationComponent implements OnInit {
     }
     if (field?.hasError('pattern')) {
       if (fieldName === 'creditCardNumber') {
-        return 'Número de tarjeta inválido (13-19 dígitos)';
+        return 'El número de tarjeta debe tener 16 dígitos';
       }
       if (fieldName === 'creditCardExpirationDate') {
         return 'Formato: MM/AA (ej: 12/25)';
