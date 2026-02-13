@@ -2,6 +2,41 @@
 
 const SPREADSHEET_ID = 'your-spreadsheet-id-here'; // Cambiar por el ID real
 
+// Headers definition - single source of truth
+const HEADERS = [
+  'Nombre Socio',
+  'Apellido Socio',
+  'DNI Socio',
+  'Fecha de Nacimiento',
+  'Foto del Documento',
+  'Nombre Titular',
+  'Apellido Titular',
+  'DNI Titular',
+  'Tarjeta de Crédito',
+  'Vencimiento Tarjeta',
+  'Fecha de Registro'
+];
+
+/**
+ * Ejecutar manualmente para actualizar/crear los encabezados
+ * Menú: Ejecutar > updateHeaders
+ */
+function updateHeaders() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getActiveSheet();
+
+  // Update or create headers in first row
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+  sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
+
+  // Auto-resize columns
+  for (let i = 1; i <= HEADERS.length; i++) {
+    sheet.autoResizeColumn(i);
+  }
+
+  SpreadsheetApp.getUi().alert('Headers updated successfully!');
+}
+
 /**
  * Endpoint POST para agregar un nuevo miembro
  */
@@ -25,23 +60,8 @@ function doPost(e) {
 
     // Crear encabezados si la hoja está vacía
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow([
-        // Member (Socio) data
-        'Nombre Socio',
-        'Apellido Socio',
-        'DNI Socio',
-        'Fecha de Nacimiento',
-        'Foto del Documento',
-        // Card Holder (Titular) data
-        'Nombre Titular',
-        'Apellido Titular',
-        'DNI Titular',
-        'Tarjeta de Crédito',
-        'Vencimiento Tarjeta',
-        // Metadata
-        'Fecha de Registro'
-      ]);
-      sheet.getRange(1, 1, 1, 11).setFontWeight('bold');
+      sheet.appendRow(HEADERS);
+      sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
     }
 
     // Agregar fila con los datos del miembro
