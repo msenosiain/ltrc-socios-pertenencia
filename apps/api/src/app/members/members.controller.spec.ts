@@ -111,4 +111,66 @@ describe('MembersController', () => {
       expect(mockMembersService.getDocumentImage).toHaveBeenCalledWith(fileId);
     });
   });
+
+  describe('update', () => {
+    it('should update a member', async () => {
+      const memberId = '507f1f77bcf86cd799439011';
+      const updateMemberDto = { firstName: 'Updated' };
+
+      await controller.update(memberId, updateMemberDto);
+      expect(mockMembersService.update).toHaveBeenCalledWith(
+        memberId,
+        updateMemberDto,
+        undefined,
+      );
+    });
+
+    it('should update a member with file', async () => {
+      const memberId = '507f1f77bcf86cd799439011';
+      const updateMemberDto = { firstName: 'Updated' };
+      const mockFile = {
+        originalname: 'test.jpg',
+        buffer: Buffer.from('test'),
+      };
+
+      await controller.update(memberId, updateMemberDto, mockFile as any);
+      expect(mockMembersService.update).toHaveBeenCalledWith(
+        memberId,
+        updateMemberDto,
+        mockFile,
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a member', async () => {
+      const memberId = '507f1f77bcf86cd799439011';
+
+      await controller.remove(memberId);
+      expect(mockMembersService.remove).toHaveBeenCalledWith(memberId);
+    });
+  });
+
+  describe('create with file', () => {
+    it('should create a member with document image', async () => {
+      const createMemberDto = {
+        firstName: 'John',
+        lastName: 'Doe',
+        birthDate: '1990-01-01',
+        documentNumber: '12345678',
+        creditCardNumber: '4111111111111111',
+        creditCardExpirationDate: '12/25',
+      };
+      const mockFile = {
+        originalname: 'dni.jpg',
+        buffer: Buffer.from('image data'),
+      };
+
+      await controller.create(createMemberDto, mockFile as any);
+      expect(mockMembersService.create).toHaveBeenCalledWith(
+        createMemberDto,
+        mockFile,
+      );
+    });
+  });
 });
