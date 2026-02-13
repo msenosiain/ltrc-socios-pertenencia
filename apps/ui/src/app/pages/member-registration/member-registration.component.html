@@ -40,7 +40,8 @@
               <input matInput
                      [matDatepicker]="picker"
                      formControlName="birthDate"
-                     placeholder="DD/MM/AAAA">
+                     placeholder="DD/MM/AAAA"
+                     [ltrcInputMask]="'date'">
               <mat-hint>Formato: DD/MM/AAAA</mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
@@ -111,9 +112,9 @@
               <mat-label>Número de Tarjeta</mat-label>
               <input matInput
                      formControlName="creditCardNumber"
-                     placeholder="1234 5678 9012 3456"
+                     placeholder="1234-5678-9012-3456"
                      maxlength="19"
-                     ltrcCreditCardMask>
+                     [ltrcInputMask]="'creditCard'">
               <mat-icon matSuffix>credit_card</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardNumber') }}</mat-error>
             </mat-form-field>
@@ -122,9 +123,9 @@
               <mat-label>Vencimiento (MM/AA)</mat-label>
               <input matInput
                      formControlName="creditCardExpirationDate"
-                     placeholder="12/25"
+                     placeholder="MM/AA"
                      maxlength="5"
-                     ltrcExpirationDateMask>
+                     [ltrcInputMask]="'expiration'">
               <mat-icon matSuffix>event</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardExpirationDate') }}</mat-error>
             </mat-form-field>

@@ -14,8 +14,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MembersService } from '../../services/members.service';
 import { CreateMemberDto } from '@socios-pertenencia/shared';
-import { CreditCardMaskDirective } from '../../directives/credit-card-mask.directive';
-import { ExpirationDateMaskDirective } from '../../directives/expiration-date-mask.directive';
+import { InputMaskDirective } from '../../directives/input-mask.directive';
 
 @Component({
   selector: 'ltrc-member-registration',
@@ -33,8 +32,7 @@ import { ExpirationDateMaskDirective } from '../../directives/expiration-date-ma
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDividerModule,
-    CreditCardMaskDirective,
-    ExpirationDateMaskDirective,
+    InputMaskDirective,
   ],
   templateUrl: './member-registration.component.html',
   styleUrl: './member-registration.component.scss'
