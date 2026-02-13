@@ -49,13 +49,11 @@ describe('MembersController', () => {
         lastName: 'Doe',
         birthDate: '1990-01-01',
         documentNumber: '12345678',
-        cardHolder: {
-          firstName: 'Jane',
-          lastName: 'Doe',
-          documentNumber: '87654321',
-          creditCardNumber: '4111111111111111',
-          creditCardExpirationDate: '12/25',
-        },
+        cardHolderFirstName: 'Jane',
+        cardHolderLastName: 'Doe',
+        cardHolderDocumentNumber: '87654321',
+        creditCardNumber: '4111111111111111',
+        creditCardExpirationDate: '12/25',
       };
 
       const result = await controller.create(createMemberDto);
@@ -163,13 +161,11 @@ describe('MembersController', () => {
         lastName: 'Doe',
         birthDate: '1990-01-01',
         documentNumber: '12345678',
-        cardHolder: {
-          firstName: 'Jane',
-          lastName: 'Doe',
-          documentNumber: '87654321',
-          creditCardNumber: '4111111111111111',
-          creditCardExpirationDate: '12/25',
-        },
+        cardHolderFirstName: 'Jane',
+        cardHolderLastName: 'Doe',
+        cardHolderDocumentNumber: '87654321',
+        creditCardNumber: '4111111111111111',
+        creditCardExpirationDate: '12/25',
       };
       const mockFile = {
         originalname: 'dni.jpg',

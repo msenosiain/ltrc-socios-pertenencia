@@ -18,13 +18,11 @@ describe('MembersService', () => {
     birthDate: new Date('1990-01-01'),
     documentImageFileId: null,
     documentImageFileName: null,
-    cardHolder: {
-      firstName: 'Jane',
-      lastName: 'Doe',
-      documentNumber: '87654321',
-      creditCardNumber: '4111111111111111',
-      creditCardExpirationDate: '12/25',
-    },
+    cardHolderFirstName: 'Jane',
+    cardHolderLastName: 'Doe',
+    cardHolderDocumentNumber: '87654321',
+    creditCardNumber: '4111111111111111',
+    creditCardExpirationDate: '12/25',
     createdAt: new Date(),
   };
 

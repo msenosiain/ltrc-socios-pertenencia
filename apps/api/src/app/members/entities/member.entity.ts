@@ -3,24 +3,6 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type MemberDocument = HydratedDocument<Member>;
 
-// Embedded schema for card holder information
-export class CardHolder {
-  @Prop({ required: true })
-  firstName: string;
-
-  @Prop({ required: true })
-  lastName: string;
-
-  @Prop({ required: true })
-  documentNumber: string;
-
-  @Prop({ required: true })
-  creditCardNumber: string;
-
-  @Prop({ required: true })
-  creditCardExpirationDate: string;
-}
-
 @Schema({ timestamps: true })
 export class Member {
   // Member (socio) information
@@ -42,9 +24,21 @@ export class Member {
   @Prop()
   documentImageFileName: string; // Original filename
 
-  // Card holder (titular de tarjeta) information - can be different from member
-  @Prop({ type: CardHolder, required: true })
-  cardHolder: CardHolder;
+  // Card holder (titular de tarjeta) information - flat fields
+  @Prop({ required: true })
+  cardHolderFirstName: string;
+
+  @Prop({ required: true })
+  cardHolderLastName: string;
+
+  @Prop({ required: true })
+  cardHolderDocumentNumber: string;
+
+  @Prop({ required: true })
+  creditCardNumber: string;
+
+  @Prop({ required: true })
+  creditCardExpirationDate: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;

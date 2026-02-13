@@ -88,15 +88,6 @@ export class MembersService {
         ? `${process.env.API_URL || 'http://localhost:3000'}/api/members/image/${member.documentImageFileId}`
         : 'N/A';
 
-      // Handle case where cardHolder might be undefined (old data)
-      const cardHolder = member.cardHolder || {
-        firstName: '',
-        lastName: '',
-        documentNumber: '',
-        creditCardNumber: '',
-        creditCardExpirationDate: '',
-      };
-
       const memberDataForSheet = {
         // Member data
         firstName: member.firstName,
@@ -105,11 +96,11 @@ export class MembersService {
         birthDate: new Date(member.birthDate).toLocaleDateString('es-AR'),
         documentImageLink,
         // Card holder data
-        cardHolderFirstName: cardHolder.firstName,
-        cardHolderLastName: cardHolder.lastName,
-        cardHolderDocumentNumber: cardHolder.documentNumber,
-        creditCardNumber: cardHolder.creditCardNumber,
-        creditCardExpirationDate: cardHolder.creditCardExpirationDate,
+        cardHolderFirstName: member.cardHolderFirstName,
+        cardHolderLastName: member.cardHolderLastName,
+        cardHolderDocumentNumber: member.cardHolderDocumentNumber,
+        creditCardNumber: member.creditCardNumber,
+        creditCardExpirationDate: member.creditCardExpirationDate,
         createdAt: new Date(member.createdAt).toLocaleString('es-AR'),
       };
 

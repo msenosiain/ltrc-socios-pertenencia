@@ -5,42 +5,11 @@ import {
   Length,
   Matches,
   IsOptional,
-  ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export interface FileUpload {
   originalname: string;
   buffer: Buffer;
-}
-
-export class CardHolderDto {
-  @IsString()
-  @IsNotEmpty()
-  firstName: string;
-
-  @IsString()
-  @IsNotEmpty()
-  lastName: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Length(8, 8, { message: 'Document number must be exactly 8 characters' })
-  documentNumber: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^\d{13,19}$/, {
-    message: 'Credit card number must be between 13 and 19 digits',
-  })
-  creditCardNumber: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^(0[1-9]|1[0-2])\/\d{2}$/, {
-    message: 'Expiration date must be in MM/YY format',
-  })
-  creditCardExpirationDate: string;
 }
 
 export class CreateMemberDto {
@@ -65,9 +34,31 @@ export class CreateMemberDto {
   @IsOptional()
   documentImage?: FileUpload;
 
-  // Card holder (titular de tarjeta) information
-  @ValidateNested()
-  @Type(() => CardHolderDto)
+  // Card holder (titular de tarjeta) information - flat fields
+  @IsString()
   @IsNotEmpty()
-  cardHolder: CardHolderDto;
+  cardHolderFirstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  cardHolderLastName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(8, 8, { message: 'Card holder document number must be exactly 8 characters' })
+  cardHolderDocumentNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^\d{13,19}$/, {
+    message: 'Credit card number must be between 13 and 19 digits',
+  })
+  creditCardNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^(0[1-9]|1[0-2])\/\d{2}$/, {
+    message: 'Expiration date must be in MM/YY format',
+  })
+  creditCardExpirationDate: string;
 }
