@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MembersService } from '../../services/members.service';
 import { CreateMemberDto } from '@socios-pertenencia/shared';
 import { CreditCardMaskDirective } from '../../directives/credit-card-mask.directive';
+import { ExpirationDateMaskDirective } from '../../directives/expiration-date-mask.directive';
 
 @Component({
   selector: 'app-member-registration',
@@ -35,6 +36,7 @@ import { CreditCardMaskDirective } from '../../directives/credit-card-mask.direc
     MatSnackBarModule,
     MatDividerModule,
     CreditCardMaskDirective,
+    ExpirationDateMaskDirective,
   ],
   templateUrl: './member-registration.component.html',
   styleUrl: './member-registration.component.scss'
@@ -49,6 +51,7 @@ export class MemberRegistrationComponent implements OnInit {
   selectedFile: File | null = null;
   selectedFileName = '';
   isSubmitting = false;
+  fileRequired = false; // Track if file validation should show error
 
   ngOnInit(): void {
     this.initForm();
@@ -109,11 +112,17 @@ export class MemberRegistrationComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       this.selectedFileName = this.selectedFile.name;
+      this.fileRequired = false; // Clear error when file is selected
     }
   }
 
   onSubmit(): void {
-    if (this.registrationForm.invalid) {
+    // Validate file is required
+    if (!this.selectedFile) {
+      this.fileRequired = true;
+    }
+
+    if (this.registrationForm.invalid || !this.selectedFile) {
       this.registrationForm.markAllAsTouched();
       return;
     }
@@ -137,7 +146,7 @@ export class MemberRegistrationComponent implements OnInit {
       creditCardExpirationDate: formValue.creditCardExpirationDate
     };
 
-    this.membersService.create(memberData, this.selectedFile ?? undefined).subscribe({
+    this.membersService.create(memberData, this.selectedFile).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.snackBar.open('¡Registro exitoso! Su solicitud ha sido enviada.', 'Cerrar', {
@@ -147,6 +156,7 @@ export class MemberRegistrationComponent implements OnInit {
         this.registrationForm.reset();
         this.selectedFile = null;
         this.selectedFileName = '';
+        this.fileRequired = false;
       },
       error: (error) => {
         this.isSubmitting = false;
@@ -155,6 +165,7 @@ export class MemberRegistrationComponent implements OnInit {
           duration: 5000,
           panelClass: ['error-snackbar']
         });
+        console.error('Registration error:', error);
       }
     });
   }

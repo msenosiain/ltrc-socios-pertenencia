@@ -101,6 +101,17 @@ mat-form-field {
     mat-icon {
       margin-right: 0.5rem;
     }
+
+    &.file-error {
+      border-color: #f44336;
+      color: #f44336;
+    }
+  }
+
+  .file-error-message {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
   }
 }
 

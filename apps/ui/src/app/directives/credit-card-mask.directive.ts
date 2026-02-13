@@ -9,9 +9,9 @@ export class CreditCardMaskDirective {
   private readonly el = inject(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true });
 
-  @HostListener('input', ['$event'])
-  onInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
+  @HostListener('input')
+  onInput(): void {
+    const input = this.el.nativeElement as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digits
 
     // Limit to 16 digits
@@ -22,10 +22,10 @@ export class CreditCardMaskDirective {
     // Format with spaces every 4 digits
     const formatted = this.formatCardNumber(value);
 
-    // Update input value
+    // Update input value with formatted display
     input.value = formatted;
 
-    // Update form control with raw value (digits only)
+    // Update form control with raw value (digits only) for validation
     if (this.ngControl?.control) {
       this.ngControl.control.setValue(value, { emitEvent: false });
     }
@@ -63,6 +63,16 @@ export class CreditCardMaskDirective {
 
     if (this.ngControl?.control) {
       this.ngControl.control.setValue(digits, { emitEvent: false });
+    }
+  }
+
+  @HostListener('focus')
+  onFocus(): void {
+    // Re-format on focus to ensure display is correct
+    const input = this.el.nativeElement as HTMLInputElement;
+    const value = this.ngControl?.control?.value || '';
+    if (value) {
+      input.value = this.formatCardNumber(value);
     }
   }
 

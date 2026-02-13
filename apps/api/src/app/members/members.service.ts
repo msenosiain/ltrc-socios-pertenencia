@@ -32,15 +32,19 @@ export class MembersService {
   }
 
   async create(createMemberDto: CreateMemberDto, file?: FileUpload): Promise<MemberDocument> {
+    this.logger.log(`Creating member: ${createMemberDto.firstName} ${createMemberDto.lastName} (DNI: ${createMemberDto.documentNumber})`);
+
     try {
       let documentImageFileId: ObjectId | null = null;
       let documentImageFileName: string | null = null;
 
       // Save document image to GridFS if exists
       if (file) {
+        this.logger.log(`Uploading document image: ${file.originalname}`);
         const result = await this.uploadFileToGridFS(file, createMemberDto.documentNumber);
         documentImageFileId = result.fileId;
         documentImageFileName = result.fileName;
+        this.logger.log(`Document image uploaded successfully: ${result.fileName}`);
       }
 
       const member = new this.memberModel({
@@ -50,6 +54,7 @@ export class MembersService {
       });
 
       const savedMember = await member.save();
+      this.logger.log(`Member created successfully: ${savedMember._id}`);
 
       // Send data to Google Sheets asynchronously (non-blocking)
       this.sendToGoogleSheets(savedMember).catch((error: Error) => {
@@ -58,6 +63,9 @@ export class MembersService {
 
       return savedMember;
     } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Error creating member: ${errorMessage}`, error instanceof Error ? error.stack : '');
+
       if (this.isDuplicateKeyError(error)) {
         throw new BadRequestException(
           `Document number ${createMemberDto.documentNumber} is already registered`,

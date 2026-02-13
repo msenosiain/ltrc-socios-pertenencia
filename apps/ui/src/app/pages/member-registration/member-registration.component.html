@@ -58,10 +58,13 @@
               accept="image/*"
               hidden
               #fileInput>
-            <button mat-stroked-button type="button" (click)="fileInput.click()">
+            <button mat-stroked-button type="button" (click)="fileInput.click()" [class.file-error]="fileRequired">
               <mat-icon>upload</mat-icon>
-              {{ selectedFileName || 'Subir foto del DNI' }}
+              {{ selectedFileName || 'Subir foto del DNI *' }}
             </button>
+            @if (fileRequired) {
+              <mat-error class="file-error-message">La foto del DNI es obligatoria</mat-error>
+            }
           </div>
         </section>
 
@@ -112,7 +115,12 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Vencimiento (MM/AA)</mat-label>
-              <input matInput formControlName="creditCardExpirationDate" placeholder="12/25" maxlength="5">
+              <input matInput
+                     formControlName="creditCardExpirationDate"
+                     placeholder="12/25"
+                     maxlength="5"
+                     appExpirationDateMask>
+              <mat-icon matSuffix>event</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardExpirationDate') }}</mat-error>
             </mat-form-field>
           </div>
