@@ -109,13 +109,20 @@ function doGet(e) {
     const rows = data.slice(1);
 
     const members = rows.map(row => ({
+      // Member data
       firstName: row[0],
       lastName: row[1],
       documentNumber: row[2],
       birthDate: row[3],
-      creditCardNumber: row[4],
-      documentImageLink: row[5],
-      createdAt: row[6]
+      documentImageLink: row[4],
+      // Card Holder data
+      cardHolderFirstName: row[5],
+      cardHolderLastName: row[6],
+      cardHolderDocumentNumber: row[7],
+      creditCardNumber: row[8],
+      creditCardExpirationDate: row[9],
+      // Metadata
+      createdAt: row[10]
     }));
 
     return ContentService.createTextOutput(

@@ -156,8 +156,7 @@ export class GoogleAppsScriptService {
       return cardNumber;
     }
     // Remover espacios existentes y formatear en grupos de 4
-    // eslint-disable-next-line prefer-string-replace-all
-    const cleaned = cardNumber.replace(/\s/g, '');
+    const cleaned = cardNumber.replaceAll(' ', '');
     return cleaned.match(/.{1,4}/g)?.join(' ') || cardNumber;
   }
 
