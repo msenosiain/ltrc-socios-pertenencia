@@ -2,19 +2,25 @@ import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 
 interface MemberDataForSheet {
+  // Member data
   firstName: string;
   lastName: string;
   documentNumber: string;
   birthDate: string;
-  creditCardNumber: string;
   documentImageLink: string;
+  // Card holder data
+  cardHolderFirstName: string;
+  cardHolderLastName: string;
+  cardHolderDocumentNumber: string;
+  creditCardNumber: string;
+  creditCardExpirationDate: string;
   createdAt: string;
 }
 
 @Injectable()
 export class GoogleAppsScriptService {
   private readonly logger = new Logger(GoogleAppsScriptService.name);
-  private googleAppsScriptUrl: string;
+  private readonly googleAppsScriptUrl: string;
 
   constructor() {
     this.googleAppsScriptUrl =
@@ -42,12 +48,18 @@ export class GoogleAppsScriptService {
       }
 
       const payload = {
+        // Member data
         firstName: memberData.firstName,
         lastName: memberData.lastName,
         documentNumber: memberData.documentNumber,
         birthDate: memberData.birthDate,
-        creditCardNumber: this.formatCreditCard(memberData.creditCardNumber),
         documentImageLink: memberData.documentImageLink,
+        // Card holder data
+        cardHolderFirstName: memberData.cardHolderFirstName,
+        cardHolderLastName: memberData.cardHolderLastName,
+        cardHolderDocumentNumber: memberData.cardHolderDocumentNumber,
+        creditCardNumber: this.formatCreditCard(memberData.creditCardNumber),
+        creditCardExpirationDate: memberData.creditCardExpirationDate,
         createdAt: memberData.createdAt,
       };
 
@@ -144,6 +156,7 @@ export class GoogleAppsScriptService {
       return cardNumber;
     }
     // Remover espacios existentes y formatear en grupos de 4
+    // eslint-disable-next-line prefer-string-replace-all
     const cleaned = cardNumber.replace(/\s/g, '');
     return cleaned.match(/.{1,4}/g)?.join(' ') || cardNumber;
   }

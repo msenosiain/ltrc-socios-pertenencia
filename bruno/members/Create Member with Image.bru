@@ -15,18 +15,25 @@ body:multipart-form {
   lastName: Senosiain
   birthDate: 1977-05-30
   documentNumber: 25984568
-  creditCardNumber: 4111111111111111
-  creditCardExpirationDate: 12/25
+  cardHolder[firstName]: María
+  cardHolder[lastName]: García
+  cardHolder[documentNumber]: 87654321
+  cardHolder[creditCardNumber]: 4111111111111111
+  cardHolder[creditCardExpirationDate]: 12/25
   documentImage: @file(/Users/miguel/Documents/dni-miguel-senosiain-biritos.jpg)
 }
 
 docs {
   # Subir imagen del DNI
-  
+
   Para adjuntar la imagen:
   1. Hacer click en el campo `documentImage`
   2. Bruno abrirá un selector de archivos
   3. Seleccionar la imagen del DNI (JPG, PNG, etc.)
-  
+
   O arrastra el archivo directamente al campo.
+
+  ## Nota sobre cardHolder
+  El titular de la tarjeta puede ser diferente al socio.
+  Si es el mismo, usar los mismos datos.
 }

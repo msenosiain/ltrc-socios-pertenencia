@@ -11,12 +11,27 @@ patch {
 }
 
 params:path {
-  id: 
+  id:
 }
 
 body:json {
   {
     "firstName": "Juan Carlos",
-    "lastName": "Pérez García"
+    "lastName": "Pérez García",
+    "cardHolder": {
+      "firstName": "María Elena",
+      "lastName": "García López",
+      "documentNumber": "87654321",
+      "creditCardNumber": "5500000000000004",
+      "creditCardExpirationDate": "06/27"
+    }
   }
 }
+
+docs {
+  # Update Member
+
+  Puedes actualizar solo los campos del socio, solo los del titular de tarjeta, o ambos.
+  Los campos no incluidos en el body no se modifican.
+}
+

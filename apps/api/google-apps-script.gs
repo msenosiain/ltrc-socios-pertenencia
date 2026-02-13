@@ -26,36 +26,50 @@ function doPost(e) {
     // Crear encabezados si la hoja está vacía
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
-        'Nombre',
-        'Apellido',
-        'DNI',
+        // Member (Socio) data
+        'Nombre Socio',
+        'Apellido Socio',
+        'DNI Socio',
         'Fecha de Nacimiento',
-        'Tarjeta de Crédito',
         'Foto del Documento',
+        // Card Holder (Titular) data
+        'Nombre Titular',
+        'Apellido Titular',
+        'DNI Titular',
+        'Tarjeta de Crédito',
+        'Vencimiento Tarjeta',
+        // Metadata
         'Fecha de Registro'
       ]);
-      sheet.getRange(1, 1, 1, 7).setFontWeight('bold');
+      sheet.getRange(1, 1, 1, 11).setFontWeight('bold');
     }
 
     // Agregar fila con los datos del miembro
     const newRow = sheet.getLastRow() + 1;
     sheet.appendRow([
+      // Member data
       payload.firstName,
       payload.lastName,
       payload.documentNumber,
       payload.birthDate,
-      payload.creditCardNumber,
       '', // Placeholder para la imagen
+      // Card Holder data
+      payload.cardHolderFirstName,
+      payload.cardHolderLastName,
+      payload.cardHolderDocumentNumber,
+      payload.creditCardNumber,
+      payload.creditCardExpirationDate,
+      // Metadata
       payload.createdAt
     ]);
 
     // Si hay imagen, crear hyperlink clickeable
     if (payload.documentImageLink && payload.documentImageLink !== 'N/A') {
-      sheet.getRange(newRow, 6).setFormula(
+      sheet.getRange(newRow, 5).setFormula(
         '=HYPERLINK("' + payload.documentImageLink + '", "📷 Ver DNI")'
       );
     } else {
-      sheet.getRange(newRow, 6).setValue('Sin imagen');
+      sheet.getRange(newRow, 5).setValue('Sin imagen');
     }
 
     return ContentService.createTextOutput(

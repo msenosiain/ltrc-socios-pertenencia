@@ -89,12 +89,18 @@ export class MembersService {
         : 'N/A';
 
       const memberDataForSheet = {
+        // Member data
         firstName: member.firstName,
         lastName: member.lastName,
         documentNumber: member.documentNumber,
         birthDate: new Date(member.birthDate).toLocaleDateString('es-AR'),
-        creditCardNumber: member.creditCardNumber,
         documentImageLink,
+        // Card holder data
+        cardHolderFirstName: member.cardHolder.firstName,
+        cardHolderLastName: member.cardHolder.lastName,
+        cardHolderDocumentNumber: member.cardHolder.documentNumber,
+        creditCardNumber: member.cardHolder.creditCardNumber,
+        creditCardExpirationDate: member.cardHolder.creditCardExpirationDate,
         createdAt: new Date(member.createdAt).toLocaleString('es-AR'),
       };
 

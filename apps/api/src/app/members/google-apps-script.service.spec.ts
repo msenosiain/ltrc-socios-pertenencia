@@ -35,8 +35,12 @@ describe('GoogleAppsScriptService', () => {
       lastName: 'Doe',
       documentNumber: '12345678',
       birthDate: '01/01/1990',
-      creditCardNumber: '4111111111111111',
       documentImageLink: 'http://localhost:3000/api/members/image/123',
+      cardHolderFirstName: 'Jane',
+      cardHolderLastName: 'Doe',
+      cardHolderDocumentNumber: '87654321',
+      creditCardNumber: '4111111111111111',
+      creditCardExpirationDate: '12/25',
       createdAt: '13/02/2026 10:00:00',
     };
 
@@ -161,8 +165,12 @@ describe('GoogleAppsScriptService', () => {
         lastName: 'Doe',
         documentNumber: '12345678',
         birthDate: '01/01/1990',
-        creditCardNumber: '4111111111111111',
         documentImageLink: 'http://localhost:3000/api/members/image/123',
+        cardHolderFirstName: 'Jane',
+        cardHolderLastName: 'Doe',
+        cardHolderDocumentNumber: '87654321',
+        creditCardNumber: '4111111111111111',
+        creditCardExpirationDate: '12/25',
         createdAt: '13/02/2026 10:00:00',
       };
 
