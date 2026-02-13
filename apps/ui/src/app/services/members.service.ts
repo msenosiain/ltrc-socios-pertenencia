@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -8,9 +8,9 @@ import { Member, CreateMemberDto } from '@socios-pertenencia/shared';
   providedIn: 'root'
 })
 export class MembersService {
+  private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/members`;
 
-  constructor(private http: HttpClient) {}
 
   create(member: CreateMemberDto, documentImage?: File): Observable<Member> {
     const formData = new FormData();

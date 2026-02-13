@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MembersService } from '../../services/members.service';
@@ -11,17 +11,17 @@ import { CreateMemberDto } from '@socios-pertenencia/shared';
   templateUrl: './member-registration.component.html',
   styleUrl: './member-registration.component.scss'
 })
-export class MemberRegistrationComponent {
-  registrationForm: FormGroup;
+export class MemberRegistrationComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly membersService = inject(MembersService);
+
+  registrationForm!: FormGroup;
   selectedFile: File | null = null;
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private membersService: MembersService
-  ) {
+  ngOnInit() {
     this.registrationForm = this.fb.group({
       // Member data
       firstName: ['', [Validators.required]],
@@ -115,4 +115,3 @@ export class MemberRegistrationComponent {
     return field ? field.invalid && field.touched : false;
   }
 }
-
