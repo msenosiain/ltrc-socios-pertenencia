@@ -17,25 +17,6 @@ const HEADERS = [
   'Fecha de Registro'
 ];
 
-/**
- * Ejecutar manualmente para actualizar/crear los encabezados
- * Menú: Ejecutar > updateHeaders
- */
-function updateHeaders() {
-  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = spreadsheet.getActiveSheet();
-
-  // Update or create headers in first row
-  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
-  sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
-
-  // Auto-resize columns
-  for (let i = 1; i <= HEADERS.length; i++) {
-    sheet.autoResizeColumn(i);
-  }
-
-  SpreadsheetApp.getUi().alert('Headers updated successfully!');
-}
 
 /**
  * Endpoint POST para agregar un nuevo miembro
