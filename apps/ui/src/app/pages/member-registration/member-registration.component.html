@@ -1,11 +1,13 @@
 <div class="registration-container">
   <mat-card class="registration-card">
     <mat-card-header>
-      <mat-card-title>
-        <mat-icon>sports_rugby</mat-icon>
-        Registro de Socio
-      </mat-card-title>
-      <mat-card-subtitle>Complete el formulario para registrarse como socio del club</mat-card-subtitle>
+      <div class="header-content">
+        <img src="logo-LosTordos.png" alt="Los Tordos Rugby Club" class="club-logo">
+        <div class="header-text">
+          <mat-card-title>Registro de Socio</mat-card-title>
+          <mat-card-subtitle>Complete el formulario para registrarse como socio del club</mat-card-subtitle>
+        </div>
+      </div>
     </mat-card-header>
 
     <mat-card-content>
@@ -22,14 +24,12 @@
             <mat-form-field appearance="outline">
               <mat-label>Nombre</mat-label>
               <input matInput formControlName="firstName" placeholder="Ingrese su nombre">
-              <mat-icon matSuffix>badge</mat-icon>
               <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Apellido</mat-label>
               <input matInput formControlName="lastName" placeholder="Ingrese su apellido">
-              <mat-icon matSuffix>badge</mat-icon>
               <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
             </mat-form-field>
           </div>
@@ -46,7 +46,6 @@
             <mat-form-field appearance="outline">
               <mat-label>Número de DNI</mat-label>
               <input matInput formControlName="documentNumber" placeholder="12345678" maxlength="8">
-              <mat-icon matSuffix>fingerprint</mat-icon>
               <mat-error>{{ getErrorMessage('documentNumber') }}</mat-error>
             </mat-form-field>
           </div>
@@ -96,7 +95,6 @@
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>DNI del Titular</mat-label>
             <input matInput formControlName="cardHolderDocumentNumber" placeholder="12345678" maxlength="8">
-            <mat-icon matSuffix>fingerprint</mat-icon>
             <mat-error>{{ getErrorMessage('cardHolderDocumentNumber') }}</mat-error>
           </mat-form-field>
 
@@ -111,7 +109,6 @@
             <mat-form-field appearance="outline">
               <mat-label>Vencimiento (MM/AA)</mat-label>
               <input matInput formControlName="creditCardExpirationDate" placeholder="12/25" maxlength="5">
-              <mat-icon matSuffix>event</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardExpirationDate') }}</mat-error>
             </mat-form-field>
           </div>
@@ -129,7 +126,6 @@
               Enviando...
             } @else {
               <ng-container>
-                <mat-icon>how_to_reg</mat-icon>
                 Registrar Socio
               </ng-container>
             }

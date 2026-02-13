@@ -20,24 +20,33 @@ $ltrc-red: #a60a14;
 
   mat-card-header {
     padding-bottom: 1rem;
+    margin-bottom: 1rem;
 
-    mat-card-title {
+    .header-content {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: $ltrc-navy;
-      font-size: 1.75rem;
+      gap: 1.5rem;
+      width: 100%;
 
-      mat-icon {
-        font-size: 2rem;
-        width: 2rem;
-        height: 2rem;
-        color: $ltrc-red;
+      .club-logo {
+        width: 80px;
+        height: auto;
+        object-fit: contain;
       }
-    }
 
-    mat-card-subtitle {
-      margin-top: 0.5rem;
+      .header-text {
+        flex: 1;
+
+        mat-card-title {
+          color: $ltrc-navy;
+          font-size: 1.75rem;
+          margin-bottom: 0.25rem;
+        }
+
+        mat-card-subtitle {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
