@@ -25,6 +25,7 @@
     "@angular/core": "~21.1.0",
     "@angular/forms": "~21.1.0",
     "@angular/material": "^21.1.4",
+    "@angular/material-moment-adapter": "^21.1.4",
     "@angular/platform-browser": "~21.1.0",
     "@angular/platform-browser-dynamic": "~21.1.0",
     "@angular/router": "~21.1.0",
@@ -38,6 +39,7 @@
     "class-validator": "^0.14.3",
     "dotenv": "^17.2.4",
     "gridfs-stream": "^1.1.1",
+    "moment": "^2.30.1",
     "mongoose": "^9.2.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0"

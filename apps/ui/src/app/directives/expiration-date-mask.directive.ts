@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appExpirationDateMask]',
+  selector: '[ltrcExpirationDateMask]',
   standalone: true
 })
 export class ExpirationDateMaskDirective {

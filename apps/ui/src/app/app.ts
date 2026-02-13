@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   imports: [RouterModule],
-  selector: 'app-root',
+  selector: 'ltrc-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  protected title = 'LTRC Socios';
+  readonly title = 'LTRC Socios';
 }

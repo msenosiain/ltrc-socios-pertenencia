@@ -37,7 +37,11 @@
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Fecha de Nacimiento</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="birthDate">
+              <input matInput
+                     [matDatepicker]="picker"
+                     formControlName="birthDate"
+                     placeholder="DD/MM/AAAA">
+              <mat-hint>Formato: DD/MM/AAAA</mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
               <mat-error>{{ getErrorMessage('birthDate') }}</mat-error>
@@ -46,6 +50,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Número de DNI</mat-label>
               <input matInput formControlName="documentNumber" placeholder="12345678" maxlength="8">
+              <mat-icon matSuffix>fingerprint</mat-icon>
               <mat-error>{{ getErrorMessage('documentNumber') }}</mat-error>
             </mat-form-field>
           </div>
@@ -108,7 +113,7 @@
                      formControlName="creditCardNumber"
                      placeholder="1234 5678 9012 3456"
                      maxlength="19"
-                     appCreditCardMask>
+                     ltrcCreditCardMask>
               <mat-icon matSuffix>credit_card</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardNumber') }}</mat-error>
             </mat-form-field>
@@ -119,7 +124,7 @@
                      formControlName="creditCardExpirationDate"
                      placeholder="12/25"
                      maxlength="5"
-                     appExpirationDateMask>
+                     ltrcExpirationDateMask>
               <mat-icon matSuffix>event</mat-icon>
               <mat-error>{{ getErrorMessage('creditCardExpirationDate') }}</mat-error>
             </mat-form-field>

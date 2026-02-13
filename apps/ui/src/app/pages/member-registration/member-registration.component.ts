@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,7 +18,7 @@ import { CreditCardMaskDirective } from '../../directives/credit-card-mask.direc
 import { ExpirationDateMaskDirective } from '../../directives/expiration-date-mask.directive';
 
 @Component({
-  selector: 'app-member-registration',
+  selector: 'ltrc-member-registration',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,7 +29,6 @@ import { ExpirationDateMaskDirective } from '../../directives/expiration-date-ma
     MatButtonModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
@@ -130,9 +128,18 @@ export class MemberRegistrationComponent implements OnInit {
     this.isSubmitting = true;
 
     const formValue = this.registrationForm.value;
-    const birthDate = formValue.birthDate instanceof Date
-      ? formValue.birthDate.toISOString().split('T')[0]
-      : formValue.birthDate;
+
+    // Handle birthDate - can be moment object, Date, or ISO string
+    let birthDate: string;
+    if (formValue.birthDate && typeof formValue.birthDate === 'object' && formValue.birthDate.format) {
+      // Moment object from datepicker
+      birthDate = formValue.birthDate.format('YYYY-MM-DD');
+    } else if (formValue.birthDate instanceof Date) {
+      birthDate = formValue.birthDate.toISOString().split('T')[0];
+    } else {
+      // Already ISO string
+      birthDate = formValue.birthDate;
+    }
 
     const memberData: CreateMemberDto = {
       firstName: formValue.firstName,
