@@ -1,3 +1,25 @@
+/* Angular Material Theme */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Custom rugby green theme
+$primary: mat.m2-define-palette(mat.$m2-green-palette, 800);
+$accent: mat.m2-define-palette(mat.$m2-amber-palette, A200, A100, A400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($theme);
+
 /* Global Styles */
 * {
   margin: 0;
@@ -7,7 +29,7 @@
 
 html, body {
   height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color: #333;
