@@ -15,8 +15,7 @@ export class AppController {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
-      uptime: this.formatUptime(uptimeSeconds),
-      uptimeSeconds: Math.floor(uptimeSeconds),
+      uptime: this.formatUptime(uptimeSeconds)
     };
   }
 
