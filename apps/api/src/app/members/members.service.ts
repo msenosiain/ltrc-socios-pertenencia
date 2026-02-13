@@ -31,31 +31,16 @@ export class MembersService {
     });
   }
 
-  async create(createMemberDto: CreateMemberDto, file?: FileUpload) {
+  async create(createMemberDto: CreateMemberDto, file?: FileUpload): Promise<MemberDocument> {
     try {
-      let documentImageFileId = null;
-      let documentImageFileName = null;
+      let documentImageFileId: ObjectId | null = null;
+      let documentImageFileName: string | null = null;
 
       // Save document image to GridFS if exists
       if (file) {
-        const fileName = `member-doc-${Date.now()}-${file.originalname}`;
-        const uploadStream = this.gridFSBucket.openUploadStream(fileName, {
-          metadata: {
-            documentNumber: createMemberDto.documentNumber,
-            uploadedAt: new Date(),
-          },
-        });
-
-        await new Promise((resolve, reject) => {
-          uploadStream.on('finish', () => {
-            documentImageFileId = uploadStream.id;
-            documentImageFileName = fileName;
-            resolve(null);
-          });
-          uploadStream.on('error', reject);
-          uploadStream.write(file.buffer);
-          uploadStream.end();
-        });
+        const result = await this.uploadFileToGridFS(file, createMemberDto.documentNumber);
+        documentImageFileId = result.fileId;
+        documentImageFileName = result.fileName;
       }
 
       const member = new this.memberModel({
@@ -67,19 +52,48 @@ export class MembersService {
       const savedMember = await member.save();
 
       // Send data to Google Sheets asynchronously (non-blocking)
-      this.sendToGoogleSheets(savedMember).catch((error) => {
+      this.sendToGoogleSheets(savedMember).catch((error: Error) => {
         this.logger.error(`Failed to update Google Sheet: ${error.message}`);
       });
 
       return savedMember;
-    } catch (error) {
-      if (error.code === 11000) {
+    } catch (error: unknown) {
+      if (this.isDuplicateKeyError(error)) {
         throw new BadRequestException(
           `Document number ${createMemberDto.documentNumber} is already registered`,
         );
       }
       throw error;
     }
+  }
+
+  private async uploadFileToGridFS(
+    file: FileUpload,
+    documentNumber: string
+  ): Promise<{ fileId: ObjectId; fileName: string }> {
+    const fileName = `member-doc-${Date.now()}-${file.originalname}`;
+    const uploadStream = this.gridFSBucket.openUploadStream(fileName, {
+      metadata: {
+        documentNumber,
+        uploadedAt: new Date(),
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      uploadStream.on('finish', () => {
+        resolve({
+          fileId: uploadStream.id,
+          fileName,
+        });
+      });
+      uploadStream.on('error', reject);
+      uploadStream.write(file.buffer);
+      uploadStream.end();
+    });
+  }
+
+  private isDuplicateKeyError(error: unknown): boolean {
+    return typeof error === 'object' && error !== null && 'code' in error && error.code === 11000;
   }
 
   private async sendToGoogleSheets(member: MemberDocument): Promise<void> {
@@ -108,16 +122,17 @@ export class MembersService {
 
       await this.googleAppsScriptService.appendMemberToSheet(memberDataForSheet);
       this.logger.log(`Member ${member.documentNumber} added to Google Sheet`);
-    } catch (error) {
-      this.logger.error(`Error sending to Google Apps Script: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Error sending to Google Apps Script: ${message}`);
     }
   }
 
-  async findAll() {
-    return await this.memberModel.find().exec();
+  async findAll(): Promise<MemberDocument[]> {
+    return this.memberModel.find().exec();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<MemberDocument> {
     const member = await this.memberModel.findById(id).exec();
     if (!member) {
       throw new NotFoundException(`Member with ID ${id} not found`);
@@ -125,7 +140,7 @@ export class MembersService {
     return member;
   }
 
-  async findByDocumentNumber(documentNumber: string) {
+  async findByDocumentNumber(documentNumber: string): Promise<MemberDocument> {
     const member = await this.memberModel.findOne({ documentNumber }).exec();
     if (!member) {
       throw new NotFoundException(
@@ -147,16 +162,16 @@ export class MembersService {
     return memberInSheet !== null;
   }
 
-  async getDocumentImage(fileId: string) {
+  async getDocumentImage(fileId: string): Promise<NodeJS.ReadableStream> {
     try {
       const objectId = new ObjectId(fileId);
       return this.gridFSBucket.openDownloadStream(objectId);
     } catch {
-      throw new NotFoundException(`Document image not found`);
+      throw new NotFoundException('Document image not found');
     }
   }
 
-  async update(id: string, updateMemberDto: UpdateMemberDto, file?: FileUpload) {
+  async update(id: string, updateMemberDto: UpdateMemberDto, file?: FileUpload): Promise<MemberDocument | null> {
     const member = await this.memberModel.findById(id).exec();
     if (!member) {
       throw new NotFoundException(`Member with ID ${id} not found`);
@@ -168,33 +183,13 @@ export class MembersService {
     // Save new document image to GridFS if provided
     if (file) {
       // Delete old file if exists
-      if (member.documentImageFileId) {
-        try {
-          await this.gridFSBucket.delete(member.documentImageFileId);
-        } catch (error) {
-          console.error(`Error deleting old file: ${error.message}`);
-        }
-      }
+      await this.deleteFileFromGridFS(member.documentImageFileId);
 
       // Upload new file
-      const fileName = `member-doc-${Date.now()}-${file.originalname}`;
-      const uploadStream = this.gridFSBucket.openUploadStream(fileName, {
-        metadata: {
-          documentNumber: updateMemberDto.documentNumber || member.documentNumber,
-          uploadedAt: new Date(),
-        },
-      });
-
-      await new Promise((resolve, reject) => {
-        uploadStream.on('finish', () => {
-          documentImageFileId = uploadStream.id;
-          documentImageFileName = fileName;
-          resolve(null);
-        });
-        uploadStream.on('error', reject);
-        uploadStream.write(file.buffer);
-        uploadStream.end();
-      });
+      const documentNumber = updateMemberDto.documentNumber ?? member.documentNumber;
+      const result = await this.uploadFileToGridFS(file, documentNumber);
+      documentImageFileId = result.fileId;
+      documentImageFileName = result.fileName;
     }
 
     const updateData = {
@@ -204,28 +199,34 @@ export class MembersService {
       updatedAt: new Date(),
     };
 
-    return await this.memberModel.findByIdAndUpdate(
+    return this.memberModel.findByIdAndUpdate(
       id,
       updateData,
       { new: true },
     ).exec();
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<MemberDocument> {
     const member = await this.memberModel.findByIdAndDelete(id).exec();
     if (!member) {
       throw new NotFoundException(`Member with ID ${id} not found`);
     }
 
     // Delete document image from GridFS if exists
-    if (member.documentImageFileId) {
-      try {
-        await this.gridFSBucket.delete(member.documentImageFileId);
-      } catch (error) {
-        console.error(`Error deleting file from GridFS: ${error.message}`);
-      }
-    }
+    await this.deleteFileFromGridFS(member.documentImageFileId);
 
     return member;
+  }
+
+  private async deleteFileFromGridFS(fileId: ObjectId | undefined): Promise<void> {
+    if (!fileId) {
+      return;
+    }
+    try {
+      await this.gridFSBucket.delete(fileId);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.warn(`Error deleting file from GridFS: ${message}`);
+    }
   }
 }

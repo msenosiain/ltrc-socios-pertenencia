@@ -1,6 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MembersService } from '../../services/members.service';
 import { CreateMemberDto } from '@socios-pertenencia/shared';
 
@@ -14,6 +15,7 @@ import { CreateMemberDto } from '@socios-pertenencia/shared';
 export class MemberRegistrationComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly membersService = inject(MembersService);
+  private readonly destroyRef = inject(DestroyRef);
 
   registrationForm!: FormGroup;
   selectedFile: File | null = null;
@@ -21,7 +23,12 @@ export class MemberRegistrationComponent implements OnInit {
   submitSuccess = false;
   submitError = '';
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.initForm();
+    this.setupFormListeners();
+  }
+
+  private initForm(): void {
     this.registrationForm = this.fb.group({
       // Member data
       firstName: ['', [Validators.required]],
@@ -39,21 +46,28 @@ export class MemberRegistrationComponent implements OnInit {
       // Same as member checkbox
       sameAsMember: [false]
     });
+  }
 
+  private setupFormListeners(): void {
     // Listen to sameAsMember changes
-    this.registrationForm.get('sameAsMember')?.valueChanges.subscribe(checked => {
-      if (checked) {
-        this.copyMemberToCardHolder();
-      }
-    });
-
-    // Also update when member fields change if checkbox is checked
-    ['firstName', 'lastName', 'documentNumber'].forEach(field => {
-      this.registrationForm.get(field)?.valueChanges.subscribe(() => {
-        if (this.registrationForm.get('sameAsMember')?.value) {
+    this.registrationForm.get('sameAsMember')?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((checked: boolean) => {
+        if (checked) {
           this.copyMemberToCardHolder();
         }
       });
+
+    // Also update when member fields change if checkbox is checked
+    const memberFields = ['firstName', 'lastName', 'documentNumber'];
+    memberFields.forEach(field => {
+      this.registrationForm.get(field)?.valueChanges
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          if (this.registrationForm.get('sameAsMember')?.value) {
+            this.copyMemberToCardHolder();
+          }
+        });
     });
   }
 
