@@ -18,5 +18,5 @@ services:
         sync: false
       - key: GOOGLE_APPS_SCRIPT_URL
         sync: false
-    healthCheckPath: /api
+    healthCheckPath: /api/health
 
